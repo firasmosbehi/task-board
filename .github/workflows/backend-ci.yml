@@ -63,5 +63,5 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: ghcr.io/firasmosbahi/task-board/backend:latest
+          tags: ghcr.io/firasmosbehi/task-board/backend:latest
           platforms: linux/amd64,linux/arm64
