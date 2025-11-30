@@ -1,3 +1,5 @@
+// Package main provides HTTP route handlers for the TaskBoard API,
+// including task creation, updates, retrieval, and deletion.
 package main
 
 import (
@@ -7,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// getTasks returns all tasks ordered by creation date (newest first).
 func getTasks(c *gin.Context) {
 	var tasks []Task
 	if err := DB.Order("created_at desc").Find(&tasks).Error; err != nil {
@@ -16,10 +19,12 @@ func getTasks(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
+// CreateTaskInput represents the expected payload for creating a new task.
 type CreateTaskInput struct {
 	Title string `json:"title" binding:"required,min=1,max=200"`
 }
 
+// createTask handles the creation of a new task.
 func createTask(c *gin.Context) {
 	var input CreateTaskInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -31,18 +36,22 @@ func createTask(c *gin.Context) {
 		Title:     input.Title,
 		Completed: false,
 	}
+
 	if err := DB.Create(&task).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create task"})
 		return
 	}
+
 	c.JSON(http.StatusCreated, task)
 }
 
+// UpdateTaskInput represents the fields that can be updated in a task.
 type UpdateTaskInput struct {
 	Title     *string `json:"title"`
 	Completed *bool   `json:"completed"`
 }
 
+// updateTask handles updates to an existing task.
 func updateTask(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -66,6 +75,7 @@ func updateTask(c *gin.Context) {
 	if input.Title != nil {
 		task.Title = *input.Title
 	}
+
 	if input.Completed != nil {
 		task.Completed = *input.Completed
 	}
@@ -78,6 +88,7 @@ func updateTask(c *gin.Context) {
 	c.JSON(http.StatusOK, task)
 }
 
+// deleteTask deletes a task by ID.
 func deleteTask(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)

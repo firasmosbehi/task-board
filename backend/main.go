@@ -1,3 +1,5 @@
+// Package main contains the backend server logic for TaskBoard, including
+// database initialization, environment variable handling, and application startup.
 package main
 
 import (
