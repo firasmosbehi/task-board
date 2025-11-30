@@ -153,13 +153,13 @@ jobs:
 
       - name: Build Backend Binary
         run: |
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o taskboard-backend
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o taskboard-backend .
 
       - name: Upload Backend Binary Artifact
         uses: actions/upload-artifact@v4
         with:
           name: backend-binary
-          path: taskboard-backend      
+          path: taskboard-backend    
 
   docker-build-push:
     runs-on: ubuntu-latest
