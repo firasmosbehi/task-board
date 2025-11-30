@@ -19,7 +19,7 @@ linters:
     - prealloc
     - gosec
     - revive
-    - exportloopref
+    - copyloopvar
     - nolintlint
 
 issues:
